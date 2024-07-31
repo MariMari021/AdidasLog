@@ -5,7 +5,7 @@ import { doc, setDoc, collection, getDocs } from 'firebase/firestore';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import RNModal from 'react-native-modal';
 
-export function Cadastro() {
+export function Cadastro({navigation}) {
   const [nomeProduto, setNomeProduto] = useState('');
   const [tamanho, setTamanho] = useState('');
   const [cor, setCor] = useState('');
@@ -112,9 +112,14 @@ export function Cadastro() {
       <StatusBar backgroundColor="#eaeeef" barStyle="dark-content" />
       <View style={styles.container}>
         <View style={styles.parteUm}>
-          <View style={styles.header}>
-            <Image source={require('./assets/logo.png')} style={styles.logo} />
-            <Text style={styles.headerTexto}>Adidas<Text style={styles.destaqueLogo}>Log</Text></Text>
+        <View style={styles.headerContainer}>
+            <View style={styles.header}>
+              <Image source={require('./assets/logo.png')} style={styles.logo} />
+              <Text style={styles.headerTexto}>Adidas<Text style={styles.destaqueLogo}>Log</Text></Text>
+            </View>
+            <TouchableOpacity style={styles.logout} onPress={() => navigation.navigate('Index')}>
+              <Image source={require('./assets/home.png')} style={styles.sairIcon} />
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.parteDois}>
@@ -246,6 +251,15 @@ export function Cadastro() {
 }
 
 const styles = StyleSheet.create({
+  sairIcon:{
+    width:35,
+    height:35
+  },
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center"
+  },
   // Defina seus estilos aqui
   modalCategoriaContainer: {
     backgroundColor: 'white',
@@ -262,8 +276,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   inputText: {
-    fontSize: 16,
-    color: '#000',
+    fontSize: 15,
+    color: 'rgba(0, 0, 0, 0.6)',
   },
   parteUm: {
     paddingTop: '8%',
@@ -340,6 +354,8 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   input: {
+
+    justifyContent:'center',
     flex: 1,
     height: 45,
     borderRadius: 8,

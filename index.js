@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, ScrollView, StatusBar, TouchableOpacity, StyleSheet } from 'react-native';
-import { auth } from './firebaseConnection'; // Import auth from your firebaseConnection.js
-import { onAuthStateChanged, signOut } from 'firebase/auth'; // Import Firebase Auth functions
+import { View, Text, Button, ScrollView, StatusBar, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { auth } from './firebaseConnection';
 
 export function Index({ navigation }) {
   const [loading, setLoading] = useState(true);
@@ -20,6 +20,15 @@ export function Index({ navigation }) {
     return unsubscribe; // Unsubscribe on unmount
   }, [navigation]);
 
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigation.navigate('Login');
+    } catch (error) {
+      console.error('Erro ao deslogar: ', error);
+    }
+  };
+
   if (loading) {
     return <Text>Carregando...</Text>;
   }
@@ -29,18 +38,22 @@ export function Index({ navigation }) {
       <StatusBar backgroundColor="#eaeeef" barStyle="dark-content" />
       <View style={style.container}>
         <View style={style.parteUm}>
-          <View style={style.header}>
-            <Image source={require('./assets/logo.png')} style={style.logo} />
-            <Text style={style.headerTexto}>Adidas<Text style={style.destaqueLogo}>Log</Text></Text>
+          <View style={style.headerContainer}>
+            <View style={style.header}>
+              <Image source={require('./assets/logo.png')} style={style.logo} />
+              <Text style={style.headerTexto}>Adidas<Text style={style.destaqueLogo}>Log</Text></Text>
+            </View>
+            <TouchableOpacity style={style.logout} onPress={handleLogout}>
+              <Text style={style.sair}>Sair</Text>
+              <Image source={require('./assets/logout.png')} style={style.sairIcon} />
+            </TouchableOpacity>
           </View>
           <View style={style.containerImagem}>
             <Image source={require('./assets/tenis.png')} style={style.tenis} />
             <View style={style.conteudoImagem}>
               <Image source={require('./assets/work.png')} style={style.work} />
               <View style={style.caixaAmarela}>
-                <Text style={style.workTexto}>
-                  Just for Workers
-                </Text>
+                <Text style={style.workTexto}>Just for Workers</Text>
               </View>
             </View>
           </View>
@@ -61,6 +74,7 @@ export function Index({ navigation }) {
               <Text style={style.botaoTexto}>Ir cadastrar</Text>
             </TouchableOpacity>
           </View>
+         
         </View>
       </View>
     </ScrollView>
@@ -69,14 +83,28 @@ export function Index({ navigation }) {
 
 
 const style = StyleSheet.create({
+  sair:{
+    fontWeight:'700',
+    fontSize:17
+  },
+  sairIcon:{
+    width:35,
+    height:35
+  },
   container: {
+
   },
   parteUm: {
-    paddingTop:'8%',
+    paddingTop: '8%',
     paddingStart: '12%',
     paddingEnd: '12%',
     padding: '14%',
     marginBottom: 35
+  },
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center"
   },
   header: {
     flexDirection: 'row',
@@ -159,42 +187,46 @@ const style = StyleSheet.create({
     fontWeight: '800',
     color: 'rgba(0, 0, 0, 0.62)'
   },
-  textoConteudo:{
-    paddingTop:'7%',
-    paddingStart:'12%',
-    paddingBottom:'10%',
+  textoConteudo: {
+    paddingTop: '7%',
+    paddingStart: '12%',
+    paddingBottom: '10%',
   },
-  texto:{
-    textAlign:'justify',
-    fontWeight:'400',
-    fontSize:17.5,
-    color:'rgba(0, 0, 0, 0.72)'
+  texto: {
+    textAlign: 'justify',
+    fontWeight: '400',
+    fontSize: 17.5,
+    color: 'rgba(0, 0, 0, 0.72)'
   },
-  botaoContainer:{
-    paddingStart:'12%',
-    flexDirection:'row',
-    justifyContent:'space-between',
-    alignItems:'center',
-    paddingBottom:'2%',
+  botaoContainer: {
+    paddingStart: '12%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingBottom: '2%',
   },
-  clique:{
-    width:85,
-    fontWeight:'700',
-    color:'rgba(0, 0, 0, 0.62)',
-    fontSize:17.8
+  clique: {
+    width: 85,
+    fontWeight: '700',
+    color: 'rgba(0, 0, 0, 0.62)',
+    fontSize: 17.8
   },
-  botao:{
-    backgroundColor:'#616161',
-    width:186,
-    height:45,
-    borderRadius:12,
-    justifyContent:'center',
-    alignItems:'center'
+  botao: {
+    backgroundColor: '#616161',
+    width: 186,
+    height: 45,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
-  botaoTexto:{
-    color:'white',
-    fontWeight:'800',
-    fontSize:18
+  botaoTexto: {
+    color: 'white',
+    fontWeight: '800',
+    fontSize: 18
+  },
+  logout: {
+    flexDirection: "row",
+    alignItems: "center"
   }
 
 
